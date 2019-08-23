@@ -15,3 +15,11 @@ To approach the solution of this problem _Siamese Networks_ are used. Siamese ne
 Siamese networks are specially found useful for the tasks which require calculating the similarity between two objects. Hereby, we use the concatenation of the L2 distance between the vectors obtained from the function _&alpha;_ with the vectors themselves.
 
 Resnet50 with weights pretrained on VGG_Face dataset when trained end to end seems to give optimal results. Hyperparameter tuning can help improve the results significantly.
+
+# Requirements
+
+To use these codes you will need to download keras_vggface, you can use this command
+
+```
+pip install git+https://github.com/rcmalli/keras-vggface.git
+```
