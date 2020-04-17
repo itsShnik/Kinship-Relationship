@@ -13,7 +13,6 @@ from keras.models import Model, load_model
 from keras.optimizers import Adam
 from keras_vggface.utils import preprocess_input
 from keras_vggface.vggface import VGGFace
-#from keras.applications.vgg16 import VGG16
 train_file_path = "../../train_relationships.csv"
 train_folders_path = "../../train/"
 val_famillies = "F09"
@@ -67,7 +66,6 @@ def gen(list_tuples, person_to_images_map, batch_size=16):
 
         X1 = [choice(person_to_images_map[x[0]]) for x in batch_tuples]
         X1 = np.array([cv2.resize(read_img(x), dsize=(198, 198), interpolation=cv2.INTER_CUBIC) for x in X1])
-        #print(X1.shape)
         X2 = [choice(person_to_images_map[x[1]]) for x in batch_tuples]
         X2 = np.array([cv2.resize(read_img(x), (198, 198), interpolation=cv2.INTER_CUBIC) for x in X2])
 
@@ -79,7 +77,7 @@ def baseline_model():
     input_2 = Input(shape=(198, 198, 3))
 
     base_model = VGGFace(model='resnet50', include_top=False)
-    #base_model.summary()
+    base_model.summary()
     #base_model.load_weights('rcmalli_vggface_tf_notop_vgg16.h5')
     for x in base_model.layers[:-3]:
         x.trainable = True
@@ -127,8 +125,6 @@ reduce_on_plateau = ReduceLROnPlateau(monitor="val_acc", mode="max", factor=0.1,
 callbacks_list = [checkpoint, reduce_on_plateau]
 
 model = baseline_model()
-# model.load_weights(file_path)
-print('debug')
 model.fit_generator(gen(train, train_person_to_images_map, batch_size=16), use_multiprocessing=True,
                     validation_data=gen(val, val_person_to_images_map, batch_size=16), epochs=50, verbose=2,
                     workers=4, callbacks=callbacks_list, steps_per_epoch=200, validation_steps=100)
